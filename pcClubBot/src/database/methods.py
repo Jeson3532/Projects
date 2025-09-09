@@ -3,12 +3,12 @@ from src.database.models import session_maker, engine, DBUsers
 
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy import select, exists, insert
-import asyncio
+from fastapi import HTTPException
 class BaseMethods:
     @classmethod
     async def check_auth_user(cls, id_: int):
         async with session_maker() as session:
-            query = select(exists().where(DBUsers.id == id_))
+            query = select(exists().where(DBUsers.id == id_).where(DBUsers.authorized))
             result = await session.execute(query)
             return result.scalar()
 

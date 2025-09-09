@@ -8,7 +8,7 @@ from aiogram.fsm.context import FSMContext
 
 from src.bot.templates import HELLO_MESSAGE, CHOICE_REG_OR_AUTH_MESSAGE
 from src.bot.fsm.groups import MenuStates
-from src.bot.keyboard.reply import get_reply_main_menu_keyboard_guest
+from src.bot.keyboard.reply import get_reply_main_menu_keyboard
 from src.bot.keyboard.inline import get_auth_or_reg_keyboard
 from src.bot.routers.user.register.router import register_states
 from src.database.methods import BaseMethods
@@ -21,10 +21,11 @@ msr = Router(name=__name__)  # Message Router
 @msr.message(CommandStart())
 async def start_command(msg: Message, state: FSMContext):
     start_state = MenuStates.START
+    user_id = msg.from_user.id
     if await state.get_state() == start_state:
-        await msg.answer("☝️ Я уже дал тебе инструкцию, тебе осталось только определиться с выбором.")
+        await msg.answer("🤖 Я уже дал тебе инструкцию, тебе осталось только определиться с выбором.")
         return
-    await msg.answer(text=HELLO_MESSAGE, reply_markup=await get_reply_main_menu_keyboard_guest())
+    await msg.answer(text=HELLO_MESSAGE, reply_markup=await get_reply_main_menu_keyboard(user_id))
     await state.set_state(start_state)
 
 
@@ -49,10 +50,11 @@ async def personal_account(msg: Message):
 @msr.message(~StateFilter(MenuStates.START), ~StateFilter(*register_states))
 async def echo(msg: Message, state: FSMContext):
     start_state = MenuStates.START
-    await msg.answer(text=HELLO_MESSAGE, reply_markup=await get_reply_main_menu_keyboard_guest())
+    user_id = msg.from_user.id
+    await msg.answer(text=HELLO_MESSAGE, reply_markup=await get_reply_main_menu_keyboard(user_id))
     await state.set_state(start_state)
 
 
 @msr.message(~StateFilter(*register_states))
 async def not_understand(msg: Message):
-    await msg.answer("Извини, но я ничего не понял. Просто выбери то, что тебе требуется 🙂")
+    await msg.answer("🤖 Извини, но я ничего не понял. Просто выбери то, что тебе требуется")
