@@ -19,7 +19,7 @@ async def _(user: UserAdd = Body(..., example={
         "age": 20
 })):
 
-    if BaseMethods.check_auth_user(user.id):
+    if BaseMethods.check_registration(user.id):
         raise HTTPException(status_code=400, detail="Данный пользователь уже зарегистрирован.")
     personal_info = {
         "id": user.id,
