@@ -3,11 +3,25 @@ from src.database.models import session_maker, engine, DBUsers
 
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy import select, exists, insert
+<<<<<<< HEAD
 import asyncio
+=======
+from fastapi import HTTPException
+>>>>>>> develop
 class BaseMethods:
     @classmethod
     async def check_auth_user(cls, id_: int):
         async with session_maker() as session:
+<<<<<<< HEAD
+=======
+            query = select(exists().where(DBUsers.id == id_).where(DBUsers.authorized))
+            result = await session.execute(query)
+            return result.scalar()
+
+    @classmethod
+    async def check_registration(cls, id_: int):
+        async with session_maker() as session:
+>>>>>>> develop
             query = select(exists().where(DBUsers.id == id_))
             result = await session.execute(query)
             return result.scalar()
