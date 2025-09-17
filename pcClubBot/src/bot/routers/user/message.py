@@ -23,12 +23,6 @@ msr = Router(name=__name__)  # Message Router
 @msr.message(CommandStart())
 async def start_command(msg: Message, state: FSMContext):
     start_state = MenuStates.START
-
-    if await state.get_state() == start_state:
-        await msg.answer("☝️ Я уже дал тебе инструкцию, тебе осталось только определиться с выбором.")
-        return
-    await msg.answer(text=HELLO_MESSAGE, reply_markup=await get_reply_main_menu_keyboard_guest())
-
     user_id = msg.from_user.id
     if await state.get_state() == start_state:
         await msg.answer("🤖 Я уже дал тебе инструкцию, тебе осталось только определиться с выбором.")
@@ -61,8 +55,6 @@ async def personal_account(msg: Message):
 async def echo(msg: Message, state: FSMContext):
     start_state = MenuStates.START
 
-    await msg.answer(text=HELLO_MESSAGE, reply_markup=await get_reply_main_menu_keyboard_guest())
-
     user_id = msg.from_user.id
     await msg.answer(text=HELLO_MESSAGE, reply_markup=await get_reply_main_menu_keyboard(user_id))
 
@@ -71,6 +63,4 @@ async def echo(msg: Message, state: FSMContext):
 
 @msr.message(~StateFilter(*register_states))
 async def not_understand(msg: Message):
-    await msg.answer("Извини, но я ничего не понял. Просто выбери то, что тебе требуется 🙂")
-
     await msg.answer("🤖 Извини, но я ничего не понял. Просто выбери то, что тебе требуется")
