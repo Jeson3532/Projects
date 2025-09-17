@@ -2,6 +2,8 @@ import re
 from typing import Annotated
 from pydantic import EmailStr, constr, BaseModel
 from pydantic_extra_types.phone_numbers import PhoneNumber
+
+
 class PersonalInfo(BaseModel):
     name: str
     email: EmailStr
@@ -16,7 +18,8 @@ def parse_reg_info(text: str):
     filter_ = re.findall(r"\d+\.\s*(.*)", text)
 
     except_incomplete_response = {"status": False, "detail": "Ответ дан неполноценно."}
-    except_error_validate = {"status": False, "detail": "Ошибка валидации данных. Проверьте корректность введенных данных."}
+    except_error_validate = {"status": False,
+                             "detail": "Ошибка валидации данных. Проверьте корректность введенных данных."}
     personal_info = dict()
 
     if filter_:
@@ -46,5 +49,3 @@ def parse_reg_info(text: str):
             return except_error_validate
 
     return except_incomplete_response
-
-

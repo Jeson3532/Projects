@@ -20,8 +20,6 @@ from src.database.methods import BaseMethods
 msr = Router(name=__name__)  # Message Router
 
 
-
-
 @msr.message(CommandStart())
 async def start_command(msg: Message, state: FSMContext):
     start_state = MenuStates.START
@@ -52,6 +50,7 @@ async def authorization_registration(msg: Message, state: FSMContext):
 async def personal_account(msg: Message, state: FSMContext):
     await msg.answer(text=...)
 
+
 @msr.message(Command("test"))
 async def personal_account(msg: Message):
     result = await BaseMethods.check_auth_user(123)
@@ -72,8 +71,6 @@ async def echo(msg: Message, state: FSMContext):
 
 @msr.message(~StateFilter(*register_states))
 async def not_understand(msg: Message):
-
     await msg.answer("Извини, но я ничего не понял. Просто выбери то, что тебе требуется 🙂")
 
     await msg.answer("🤖 Извини, но я ничего не понял. Просто выбери то, что тебе требуется")
-
